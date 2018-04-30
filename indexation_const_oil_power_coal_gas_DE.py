@@ -26,7 +26,10 @@ from sklearn import datasets, linear_model
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn import preprocessing
-
+from sklearn import datasets, linear_model
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+from scipy import stats
 
 
 # Import data
@@ -185,6 +188,13 @@ def linear_regression(X_train,y_train, X_test, y_test):
     r2_train = r2_score(y_train, regr.predict(X_train))
     return regr.coef_ , err, r2, r2_train
     
+
+
+def OLS_stat(X,y):
+    """Summary statistics for OLS."""
+    est = sm.OLS(y, X)
+    est2 = est.fit()
+    print(est2.summary())
 
 
 class class_alternate(object):
@@ -373,7 +383,7 @@ if __name__ == '__main__':
     d = t1 - t0
     print ("Total duration in Seconds %6.3f" % d)               
     print('final coef: ', coef)
-    
+    OLS_stat(XX_stand,y)
     
     
     #Step 2: Model calibration
