@@ -341,12 +341,13 @@ class class_alternate(object):
             # update coef
             coef = res_ridge[0]
             y_pred_GD = np.dot(X_test,gradient_w)
+            print('--------- Gradient descent ---------')
             print('Coef GD:', gradient_w )
             print('Error GD:', metrics.mean_squared_error(y_test, y_pred_GD))
             print('R2_test GD', r2_score(y_test, y_pred_GD)  )
             print('R2_all_matrix GD', r2_score(preprocessing.scale(self.y), np.dot(XX_stand,gradient_w))  )
                      
-            print('---------')
+            print('--------- Ridge regression ---------')
             
             print('Coef RR:', res_ridge[0] )
             print('Error RR: ', res_ridge[1])
@@ -363,6 +364,7 @@ class class_alternate(object):
 if __name__ == '__main__':
     
     #Step 1: optimizing lag, ma_period, reset_period and get the coefficients     
+    
                                    #df_oil, df_power, df_coal, df_gas, y, start_date_str,end_date_str, nbr_months_per_year, nbr_iterations, max_lag, max_ma_period, max_reset_period ,init_coef
     optimization = class_alternate(df_oil, df_power ,df_coal ,df_gas,y ,'2016-01-31 00:00:00','2017-01-31 00:00:00', 12, 5, 12 , 12, 7, np.array([0,0.0077,0.0014,0.0026,0.0032]))
     t0 = time()
@@ -372,5 +374,9 @@ if __name__ == '__main__':
     print ("Total duration in Seconds %6.3f" % d)               
     print('final coef: ', coef)
     
-   
+    
+    
+    #Step 2: Model calibration
+    
+    #Step 3: Monte Carlo for gas storage
    
