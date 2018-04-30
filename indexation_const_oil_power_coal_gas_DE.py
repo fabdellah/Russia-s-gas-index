@@ -343,9 +343,10 @@ class class_alternate(object):
             X_df = self.MA_func_vect(lag_oil, lag_power, lag_coal, lag_gas, period_oil, period_power, period_coal, period_gas, reset_oil, reset_power, reset_coal, reset_gas, np.empty(0))     
             XX_stand = np.c_[np.ones(X_df.shape[0]), preprocessing.scale(X_df).reshape(self.nbr_months_per_year,4)] 
             w_initial = gradient_w
-            gradient_loss, gradient_w = gradient_descent(preprocessing.scale(self.y), XX_stand, w_initial, max_iters, gamma)            
+            #gradient_loss, gradient_w = gradient_descent(preprocessing.scale(self.y), XX_stand, w_initial, max_iters, gamma)            
             X_train, X_test, y_train, y_test = train_test_split(XX_stand, preprocessing.scale(self.y), random_state=1)
             
+            gradient_loss, gradient_w = gradient_descent(preprocessing.scale(y_train), X_train, w_initial, max_iters, gamma)  
             res_ridge = ridge_regression(X_train, y_train, X_test, y_test)
              
             # update coef
@@ -354,15 +355,16 @@ class class_alternate(object):
             print('--------- Gradient descent ---------')
             print('Coef GD:', gradient_w )
             print('Error GD:', metrics.mean_squared_error(y_test, y_pred_GD))
+            print('R2_train GD', r2_score(preprocessing.scale(y_train), np.dot(X_train,gradient_w))  )
             print('R2_test GD', r2_score(y_test, y_pred_GD)  )
-            print('R2_all_matrix GD', r2_score(preprocessing.scale(self.y), np.dot(XX_stand,gradient_w))  )
-                     
+                                
             print('--------- Ridge regression ---------')
             
             print('Coef RR:', res_ridge[0] )
             print('Error RR: ', res_ridge[1])
-            print('R2 RR: ', res_ridge[2])
             print('R2_train RR: ', res_ridge[3])
+            print('R2_test RR: ', res_ridge[2])
+            
             t12 = time()
             d2 = t12-t02
             print ("Duration of process 2 in Seconds %6.3f" % d2)        
@@ -383,6 +385,7 @@ if __name__ == '__main__':
     d = t1 - t0
     print ("Total duration in Seconds %6.3f" % d)               
     print('final coef: ', coef)
+    
     OLS_stat(XX_stand,y)
     
     
