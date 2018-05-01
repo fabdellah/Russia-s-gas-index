@@ -386,7 +386,7 @@ if __name__ == '__main__':
     print ("Total duration in Seconds %6.3f" % d)               
     print('final coef: ', coef)
     
-    OLS_stat(XX_stand,y)
+    
     
     
     #Step 2: Model calibration
